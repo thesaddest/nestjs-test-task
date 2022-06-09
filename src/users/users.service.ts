@@ -38,6 +38,7 @@ export class UsersService {
     async updateUserName(id: number, dto: UpdateUserNameDto) {
         const user = await this.userRepository.findOne({where: {id}});
         user.name = dto.name
+        await user.save()
         return user
     }
 
