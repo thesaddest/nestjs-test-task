@@ -1,29 +1,24 @@
-import {Column, DataType, Model, Table} from "sequelize-typescript";
+import {BelongsToMany, Column, DataType, Model, Table} from "sequelize-typescript";
+import {User} from "../users/users.model";
+import {UserTeams} from "./user-teams.model";
 
-interface UserCreationAttrs {
-    email: string,
+interface TeamCreationAttrs {
     name: string,
-    timezone: string
+    logo: string
 }
 
-@Table({tableName:'users'})
-export class User extends Model<User, UserCreationAttrs> {
+@Table({tableName:'teams'})
+export class Team extends Model<Team, TeamCreationAttrs> {
 
     @Column({type: DataType.INTEGER, unique:true, autoIncrement: true, primaryKey: true})
     id: number;
 
-    @Column({type: DataType.STRING, allowNull: false})
+    @Column({type: DataType.STRING, unique: true, allowNull: false})
     name: string;
 
     @Column({type: DataType.STRING, unique:true, allowNull: false})
-    email: string;
+    logo: string;
 
-    @Column({type: DataType.STRING, allowNull:false})
-    timezone: string;
-
-    @Column({type: DataType.BOOLEAN, defaultValue: false})
-    validated: boolean;
-
-    @Column({type: DataType.STRING, allowNull: true})
-    validationToken: string
+    @BelongsToMany(() => User, () => UserTeams)
+    users: User[]
 }
